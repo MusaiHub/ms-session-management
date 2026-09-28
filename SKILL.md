@@ -22,12 +22,18 @@ Audit and repair stored Hermes sessions across isolated profiles, especially whe
 
 ### 1. Machine-wide inventory (use Hermes CLI, not raw SQL)
 
+**Fast listing (metadata only — no exports):**
 ```bash
 hermes profile list
 hermes sessions stats
 hermes --profile <name> sessions stats  # repeat for each profile
 hermes sessions list --limit 100
 hermes --profile <name> sessions list --limit 100
+```
+
+**Full inspection (when you need message payloads, models, tool calls):**
+```bash
+hermes sessions export --session-id <ID> --format jsonl -
 ```
 
 The CLI commands above are authoritative. They already:
@@ -37,6 +43,8 @@ The CLI commands above are authoritative. They already:
 - Sort by last activity
 
 **Do not write custom SQLite scripts** — the CLI is the single source of truth.
+
+**Use fast listing for the mandatory table output.** Export only when debugging message content, verifying model config, or auditing tool calls.
 
 ### 2. Mandatory table output
 
